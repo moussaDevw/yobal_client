@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>744106339011-vtvvop8c9lelfkrlubu3061hspj33tfa.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.744106339011-vtvvop8c9lelfkrlubu3061hspj33tfa</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>744106339011-5svtbondl44467rho24ait1nqsh4mq1v.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCfcyUaSBU97zMjLSFLNxp4D5x1IYN8WTA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>744106339011</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.mapglovo</string>
+	<key>PROJECT_ID</key>
+	<string>appglovo</string>
+	<key>STORAGE_BUCKET</key>
+	<string>appglovo.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:744106339011:ios:9ff218d1c4afa3dc599076</string>
+</dict>
+</plist>

@@ -1,0 +1,6 @@
+module Pods_mapGlovo {
+  umbrella header "Pods-mapGlovo-umbrella.h"
+
+  export *
+  module * { export * }
+}

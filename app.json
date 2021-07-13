@@ -1,0 +1,12 @@
+{
+  "name": "mapGlovo",
+  "displayName": "mapGlovo",
+  "expo": {
+    "name": "mapGlovo",
+    "slug": "mapGlovo",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

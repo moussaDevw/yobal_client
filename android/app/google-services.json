@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "744106339011",
+    "project_id": "appglovo",
+    "storage_bucket": "appglovo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744106339011:android:95ee805a3f5beec4599076",
+        "android_client_info": {
+          "package_name": "com.mapglovo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "744106339011-5svtbondl44467rho24ait1nqsh4mq1v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mapglovo",
+            "certificate_hash": "5de30c4446fc92b73d3be891dccb62853ca3ba18"
+          }
+        },
+        {
+          "client_id": "744106339011-nhon946uhkoe44s783gi5kcad6i0cqpf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASciI12XWtd-5EsG_t6HN9Yp2jqI4rKB8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744106339011-nhon946uhkoe44s783gi5kcad6i0cqpf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
