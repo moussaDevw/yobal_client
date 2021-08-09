@@ -1,6 +1,6 @@
 
 import { StatusBar } from 'expo-status-bar';
-import React,{useEffect, useContext, useMemo} from 'react';
+import React, {useEffect, useContext, useRef, useMemo, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,7 +10,7 @@ import {
   Animated,
   Touchable,
   ActivityIndicator,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 
 import { AntDesign } from '@expo/vector-icons';
@@ -24,6 +24,10 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import * as Animatable from 'react-native-animatable';
 import {AuthContext} from '../navigation/AuthProvider';
 import Modal from 'react-native-modal';
+import { Autocomplete, AutocompleteItem } from '@ui-kitten/components';
+
+// Autocomplete Filter
+const filter = (item, query) => item.name.toLowerCase().includes(query.toLowerCase());
 
 
 const { width, height } = Dimensions.get('window');
@@ -38,6 +42,10 @@ const animation = {
   1 : {translateX: 0}
 }
 
+
+/**************
+*   Circle
+**************/
 const Circle = ({ scrollX, products }) => {
   return (
     <View style={[StyleSheet.absoluteFillObject, styles.circleContainer]}>
@@ -74,6 +82,10 @@ const Circle = ({ scrollX, products }) => {
   );
 };
 
+
+/**************
+*   Ticker
+**************/
 const Ticker = ({ scrollX, products }) => {
   const inputRange = [-width, 0, width];
   const translateY = scrollX.interpolate({
@@ -95,6 +107,10 @@ const Ticker = ({ scrollX, products }) => {
   );
 };
 
+
+/**************
+*   Item
+**************/
 const Item = ({ imageUri, price, description, index, scrollX, product, setPanier, setLoading, panier}) => {
 
   const [quantity, setQuantity] = useState(1)
@@ -178,7 +194,7 @@ const Item = ({ imageUri, price, description, index, scrollX, product, setPanier
             },
           ]}
         >
-          {price+' MAD'}
+          {price+' NGN'}
         </Animated.Text>
         <Animated.Text
           style={[
@@ -226,6 +242,10 @@ const Item = ({ imageUri, price, description, index, scrollX, product, setPanier
   );
 };
 
+
+/***************
+*   Pagination
+***************/
 const Pagination = ({ scrollX, products, marketData }) => {
   const inputRange = [-width, 0, width];
   const translateX = scrollX.interpolate({
@@ -258,6 +278,9 @@ const Pagination = ({ scrollX, products, marketData }) => {
 };
 
 
+/****************
+*   ProductItem
+*****************/
 const ProductItem = ({index, item, deleteItem}) => {
 
   return(
@@ -284,7 +307,7 @@ const ProductItem = ({index, item, deleteItem}) => {
                 </View>       
 
                 <View style={{padding:10, backgroundColor:'#d8d8d8', borderRadius:20, alignItems: 'center',}}>
-                  <Text style={{fontFamily:'Poppins-Bold', fontSize:15}}>{item.price + ' MAD'}</Text>
+                  <Text style={{fontFamily:'Poppins-Bold', fontSize:15}}>{item.price + ' NGN'}</Text>
                 </View>                             
 
                 <View style={{flexDirection:'row-reverse'}}>
@@ -298,6 +321,9 @@ const ProductItem = ({index, item, deleteItem}) => {
 }
 
 
+/**************
+*   Panier
+**************/
 function Panier ({setSlide, products, panier, marketData, setPanier}) {
 
   const {chosenAdress, setSpinner} = useContext(AuthContext);
@@ -396,7 +422,7 @@ function Panier ({setSlide, products, panier, marketData, setPanier}) {
           <View style={{backgroundColor:'#FFF', borderRadius:20, alignItems: 'center', justifyContent: 'center',padding:20}}>            
             <Image  source={require('../assets/images/money.png')} />
             <Text style={{fontFamily:'Poppins-Bold', fontSize:20, textAlign:'center', color:'rgba(0,0,0,0.6)'}}>Le total de votre demande est : </Text>    
-            <Text style={{fontFamily:'Poppins-Bold', fontSize:20, textAlign:'center', color:'#000'}}>{totalAmount + ' MAD'}</Text>            
+            <Text style={{fontFamily:'Poppins-Bold', fontSize:20, textAlign:'center', color:'#000'}}>{totalAmount + ' NGN'}</Text>            
             <View style={{flexDirection:'row',  justifyContent:'space-between'}}>   
               <MyTouchable style={styles.buttons} onPress={() => toggleModal(false)} >
                 <Text style={{color:"#3b5998", fontFamily:'Poppins-Bold'}}>Fermer</Text>
@@ -412,10 +438,44 @@ function Panier ({setSlide, products, panier, marketData, setPanier}) {
   )
 }
 
+
+/***********************
+*   Food Menu Component
+************************/
 function FoodMenuComponent({navigation, products, setSlide, setPanier, panier}) {
 
-  const scrollX = React.useRef(new Animated.Value(0)).current;
+  const scrollX = useRef(new Animated.Value(0)).current;
   const [loading, setLoading] = useState(false)
+
+  // Scroll to the item when press on it
+  const ref = useRef()
+  const onItemPress = useCallback(itemIndex => {
+    ref.current.scrollToOffset({
+      offset: itemIndex * width
+    })
+  })
+
+  // For Autocomplete
+  const [value, setValue] = useState(null);
+  const [data, setData] = useState(products);
+
+  const onSelect = (index) => {
+    setValue(products[index].name);
+    onItemPress(index)
+  };
+
+  const onChangeText = (query) => {
+    setValue(query);
+    setData(products.filter(item => filter(item, query)));
+  };
+
+  const renderOption = (item, index) => (
+    <AutocompleteItem
+      key={index}
+      title={item.name}
+    />
+  );
+  {/* End Autocomplete */}
   
   if(loading){
     return(
@@ -441,7 +501,26 @@ function FoodMenuComponent({navigation, products, setSlide, setPanier, panier}) 
               onPress={()=>{
                   navigation.goBack();
               }}
-          />   
+          />
+
+        {/* Autocomplete */}
+        <View style={{
+          position: 'absolute',
+          top: 33,
+          left: 30,
+          width: "80%",
+          zIndex: 1
+        }}>
+        <Autocomplete
+          placeholder='Choose a dish'
+          value={value}
+          onSelect={onSelect}
+          onChangeText={onChangeText}>
+          {data.map(renderOption)}
+        </Autocomplete>
+        </View>
+        {/* End Autocomplete */}
+
         <MyTouchable onPress={() => setSlide(1)} style={[{padding:20, borderTopLeftRadius:20,borderBottomLeftRadius:20, backgroundColor:'#758ab6', position: 'absolute', bottom:290, right:-10, zIndex:99, flexDirection:'row', alignItems: 'center' }, styles.shadow]}>
           <IconFeather color='#FFF' size={20} name='shopping-cart' />
           <Text style={{fontFamily:'Poppins-Medium', color: '#FFF'}}>  Votre Panier</Text>
@@ -449,7 +528,10 @@ function FoodMenuComponent({navigation, products, setSlide, setPanier, panier}) 
 
         <StatusBar style='auto' hidden />
         <Circle products={products} scrollX={scrollX} />
+
+
         <Animated.FlatList
+          ref={ref}
           keyExtractor={(item) => item.id}
           data={products}
           renderItem={({ item, index }) => (
@@ -464,6 +546,9 @@ function FoodMenuComponent({navigation, products, setSlide, setPanier, panier}) 
           )}
           scrollEventThrottle={16}
         />
+        
+
+        
         <Pagination products={products} scrollX={scrollX} />
         <Ticker products={products} scrollX={scrollX} />    
       </View>
@@ -472,6 +557,9 @@ function FoodMenuComponent({navigation, products, setSlide, setPanier, panier}) 
 }
 
 
+/**************
+*   Food Menu
+**************/
 const FoodMenu = ({navigation, route}) => {
 
   // console.log('thats market object', route)
@@ -483,7 +571,7 @@ const FoodMenu = ({navigation, route}) => {
   const marketData = route.params.marketItem;
   const marketId = marketData.id;
 
-    // Events to run whenever you navigate to this screen
+  // Events to run whenever you navigate to this screen
   useEffect(() => {        
       const unsubscribe = navigation.addListener('focus', () => {      
           getProducts(setProducts, marketId)
@@ -513,6 +601,60 @@ const FoodMenu = ({navigation, route}) => {
 }
 
 export default FoodMenu
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const styles = StyleSheet.create({

@@ -6,6 +6,7 @@ import {getMarkets} from '../src/DataController'
 import {AuthContext} from '../navigation/AuthProvider'
 import {prefix} from '../Constants'
 import Slide from '../components/Lottie/Slide'
+import { Autocomplete, AutocompleteItem } from '@ui-kitten/components';
 
 
 const BrandItem = ({navigation, item}) => {
@@ -29,6 +30,9 @@ const BrandItem = ({navigation, item}) => {
     )
 }
 
+// Autocomplete Filter    
+const filter = (item, query) => item.name.toLowerCase().includes(query.toLowerCase());
+
 const BrandList = ({navigation, route}) =>  {
 
     const {chosenAdress} = useContext(AuthContext);  
@@ -39,6 +43,26 @@ const BrandList = ({navigation, route}) =>  {
     const [emptyList, setEmptyList] = useState(false)
 
 
+    const [value, setValue] = useState(null);
+    const [data, setData] = useState(brandsList);
+
+    // Do Action On Select item 
+    const onSelect = (index) => {
+        setValue(brandsList[index].name);
+    };
+
+    // Do Action On Change item
+    const onChangeText = (query) => {
+        setValue(query);
+        setData(brandsList.filter(item => filter(item, query)));
+    };
+
+    const renderOption = ({item, index}) => (
+        <AutocompleteItem
+            key={index}
+            title={item.name}
+        />
+    );
 
     // Events to run whenever you navigate to this screen
     useEffect(() => {        
@@ -63,34 +87,60 @@ const BrandList = ({navigation, route}) =>  {
     else{
         return(
             <SafeAreaView style={{flex:1}} >
-            <AntDesign
-                hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}
-                onPress={() => navigation.openDrawer()}
-                name='menufold'
-                size={32}
-                color='#222'
-                style={{position: 'absolute', top: 20, right: 0, padding: 20,zIndex:99999 }}
-            />
-             <AntDesign
-                hitSlop={{ left: 20, right: 20, top: 10, bottom: 10 }}
-                onPress={() => navigation.goBack()}
-                name='arrowleft'
-                size={32}
-                color='#222'
-                style={{position: 'absolute', top: 20, left: 0, padding: 20,zIndex:99999 }}
-            />
-                <StatusBar hidden />            
-                {brandsList ? <FlatList
-                    style={{marginTop:20}}
+                <AntDesign
+                    hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}
+                    onPress={() => navigation.openDrawer()}
+                    name='menufold'
+                    size={32}
+                    color='#222'
+                    style={{position: 'absolute', top: 20, right: 0, padding: 20,zIndex:99999 }}
+                />
+                <AntDesign
+                    hitSlop={{ left: 20, right: 20, top: 10, bottom: 10 }}
+                    onPress={() => navigation.goBack()}
+                    name='arrowleft'
+                    size={32}
+                    color='#222'
+                    style={{position: 'absolute', top: 20, left: 0, padding: 20,zIndex:99999 }}
+                />
+
+                <StatusBar hidden />
+
+                {/* Add by ilyass.net */}
+                <View style={{marginTop: 90, paddingRight: 20, paddingLeft: 20}}>
+                <Autocomplete
+                    placeholder='Type name of restaurant ...'
+                    value={value}
+                    onSelect={onSelect}
+                    onChangeText={onChangeText}>
+
+                    {/* {data.map(renderOption)} */}
+                    <FlatList 
+                        data={data}
+                        renderItem={renderOption}
+                    />
+
+                </Autocomplete>
+                </View>
+
+                
+                {/* Rendering list of restaurants */}
+                {brandsList ? 
+                <FlatList
+                    // style={{marginTop:20}}
                     contentContainerStyle={{padding:20}}
-                    data= {brandsList}
+                    data={data ? data : brandsList}
                     keyExtractor={item => item.key}
                     renderItem={({item})=>{
                         return(
                             <BrandItem  item={item} navigation={navigation} />
                         )                    
                     }}
-                /> :  <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><ActivityIndicator size="large" color="#758ab6" /></View>}
+                /> 
+                :
+                <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><ActivityIndicator size="large" color="#758ab6" /></View>
+                }
+
             </SafeAreaView>
         )
     }
