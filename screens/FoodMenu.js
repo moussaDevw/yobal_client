@@ -194,7 +194,7 @@ const Item = ({ imageUri, price, description, index, scrollX, product, setPanier
             },
           ]}
         >
-          {price+' NGN'}
+          {price+' FCFA'}
         </Animated.Text>
         <Animated.Text
           style={[
@@ -307,7 +307,7 @@ const ProductItem = ({index, item, deleteItem}) => {
                 </View>       
 
                 <View style={{padding:10, backgroundColor:'#d8d8d8', borderRadius:20, alignItems: 'center',}}>
-                  <Text style={{fontFamily:'Poppins-Bold', fontSize:15}}>{item.price + ' NGN'}</Text>
+                  <Text style={{fontFamily:'Poppins-Bold', fontSize:15}}>{item.price + ' FCFA'}</Text>
                 </View>                             
 
                 <View style={{flexDirection:'row-reverse'}}>
@@ -422,7 +422,7 @@ function Panier ({setSlide, products, panier, marketData, setPanier}) {
           <View style={{backgroundColor:'#FFF', borderRadius:20, alignItems: 'center', justifyContent: 'center',padding:20}}>            
             <Image  source={require('../assets/images/money.png')} />
             <Text style={{fontFamily:'Poppins-Bold', fontSize:20, textAlign:'center', color:'rgba(0,0,0,0.6)'}}>Le total de votre demande est : </Text>    
-            <Text style={{fontFamily:'Poppins-Bold', fontSize:20, textAlign:'center', color:'#000'}}>{totalAmount + ' NGN'}</Text>            
+            <Text style={{fontFamily:'Poppins-Bold', fontSize:20, textAlign:'center', color:'#000'}}>{totalAmount + ' FCFA'}</Text>            
             <View style={{flexDirection:'row',  justifyContent:'space-between'}}>   
               <MyTouchable style={styles.buttons} onPress={() => toggleModal(false)} >
                 <Text style={{color:"#3b5998", fontFamily:'Poppins-Bold'}}>Fermer</Text>

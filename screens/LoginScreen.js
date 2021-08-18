@@ -7,6 +7,7 @@ import {
   Platform,
   StyleSheet,
   ScrollView,
+  Alert
 } from 'react-native';
 import FormInput from '../components/myLogin/FormInput';
 import FormButton from '../components/myLogin/FormButton';
@@ -35,11 +36,18 @@ const LoginScreen = ({navigation}) => {
         password: password,        
       })
     })
-    const responseJson = await response.json();         
-    console.log('login response   ',responseJson)
-    await AsyncStorage.setItem('userToken', JSON.stringify(responseJson.token))
-    setUser(responseJson)           
-    setSpinner(false)              
+    const responseJson = await response.json();
+    console.log('login response ', responseJson)
+    
+    if (responseJson.error === true || password === undefined) {
+      setSpinner(false)
+      Alert.alert(responseJson.message)
+    }
+    else {
+      await AsyncStorage.setItem('userToken', JSON.stringify(responseJson.token))
+      setUser(responseJson)           
+      setSpinner(false) 
+    }             
   }  
 
   

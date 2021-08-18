@@ -1,37 +1,37 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import { StatusBar, Animated, Text, Image, View, StyleSheet, Dimensions,FlatList  } from 'react-native';
+import { StatusBar, Animated, Text, Image, View, StyleSheet, Dimensions,FlatList, Pressable  } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { interpolate } from 'react-native-reanimated';
 import Slide from '../components/Lottie/Slide'
 const {width, height} = Dimensions.get('screen');
 import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 // https://www.flaticon.com/packs/retro-wave
 // inspiration: https://dribbble.com/shots/11164698-Onboarding-screens-animation
 // https://twitter.com/mironcatalin/status/1321180191935373312
 
 
-const bgs = ['#758ab6', '#758ab6', '#758ab6'];
+const bgs = ['#3e5697', '#3e5697', '#3e5697'];
 const DATA = [
   {
     "key": "3571572",
-    "title": "Multi-lateral",
-    "description": "I'll back up the multi-byte XSS matrix, that should feed the SCSI application!",
-    "source": require('../assets/json/order.json')
+    "title": "Commendez ce que vous voulez",
+    "description": "Sachez à tout moment où se trouve votre commande, du restaurant à votre porte",
+    "source": require('../assets/json/order_on_app.json')
   },
   {
     "key": "3571747",
-    "title": "Automated radical data-warehouse",
-    "description": "Use the optical SAS system, then you can navigate the auxiliary alarm!",
-    "source": require('../assets/json/deliveryMan.json')
+    "title": "Suivez vos commandes en temps réel!",
+    "description": "Sachez à tout moment où se trouve votre commande, du restaurant à votre porte",
+    "source": require('../assets/json/tack_orders.json')
   },
   {
     "key": "3571603",
-    "title": "Monitored global data-warehouse",
-    "description": "We need to program the open-source IB interface!",
-    "source": require('../assets/json/money.json')
+    "title": "Recevez vos articles sur le champs",
+    "description": "Livraison ultra-rapide. Profitez de la garantie de qualité à 100% de Yobal sur chaque commande.",
+    "source": require('../assets/json/order-completed.json')
   }
 ]
 
@@ -39,22 +39,20 @@ const DATA = [
 const LoginButton = ({navigation}) =>{
   
   return(
-  <TouchableOpacity
-      onPress={()=>navigation.navigate('LoginScreen')}
-      style={{flex:1,alignItems:'center', justifyContent: 'center',}}
-  >
-      <View style={[styles.shadow,{width:100, height:50}]}>
-          <LinearGradient
-              style={{flex:1, alignItems:'center', justifyContent: 'center',borderRadius:20,flexDirection:'row'}}
-              colors={["#FFF","#FFF"]}
-              start={{x:0, y:0}}
-              end={{x:0, y:1}}              
-          >                               
-            <Text style={{fontFamily:'Poppins-ExtraLight',fontSize:15}}>{"Login "}</Text>             
-            <Icon size={20} name='arrow-right' />            
-          </LinearGradient>
-      </View>            
-  </TouchableOpacity>    
+    <View style={{position: 'relative', top: 72, right: -130}}>
+      <TouchableOpacity
+          onPress={()=>navigation.navigate('LoginScreen')}         
+      >
+          <View style={{width:130, height:75}}>
+              <View
+                  style={{flex:1, alignItems:'center', justifyContent: 'center',borderRadius:20,flexDirection:'row'}}           
+              >                               
+                <Text style={{fontFamily:'Poppins-Regular',fontSize:17, color: '#FFF', fontWeight: '300'}}>{"Login  "}</Text>             
+                <Icon size={20} name='right' color='#FFF'/>            
+              </View>
+          </View>            
+      </TouchableOpacity>
+  </View>    
   )
 }
 const Indicator = ({scrollX}) => {
@@ -73,7 +71,7 @@ const Indicator = ({scrollX}) => {
           width:10,
           height:10,
           borderRadius:5,
-          backgroundColor:'#333',
+          backgroundColor:'#fff',
           margin:10,
           transform:[
             {
@@ -160,7 +158,7 @@ export default function Intro({navigation}) {
                 <Slide source={item.source}/>                
               </View> 
               <View style={{flex:.2}}>
-                <Text style={{color:"#FFF",fontWeight:'800',fontSize:28, marginBottom:10,fontFamily:'Poppins-ExtraLight'}} >{item.title}</Text>
+                <Text style={{color:"#FFF",fontWeight:'800',fontSize:28, marginTop:20, marginBottom:10,fontFamily:'Poppins-ExtraLight'}} >{item.title}</Text>
                 <Text style={{fontWeight:'300', color:"#FFF",fontFamily:'Poppins-Regular'}} >{item.description}</Text>
               </View>  
               <View style={{flex:.1}}>
