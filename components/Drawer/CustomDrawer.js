@@ -190,7 +190,7 @@ export default function CustomDrawer({ navigation, selectedRoute, routes }) {
             })}
             <Button
               key={"logout"}
-              title={"logout"}
+              title={"Déconnexion"}
               index={8}
               style={[
                 styles.button,

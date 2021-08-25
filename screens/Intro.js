@@ -18,13 +18,13 @@ const DATA = [
   {
     "key": "3571572",
     "title": "Commendez ce que vous voulez",
-    "description": "Sachez à tout moment où se trouve votre commande, du restaurant à votre porte",
+    "description": "YOBAL est le meilleur moyen de se faire livrer.Nous obtenons vos plats ou produits de n’importe ou en un temps record, combinant une réelle commodité avec une équipe très expérimentée.",
     "source": require('../assets/json/order_on_app.json')
   },
   {
     "key": "3571747",
     "title": "Suivez vos commandes en temps réel!",
-    "description": "Sachez à tout moment où se trouve votre commande, du restaurant à votre porte",
+    "description": "Sachez à tout moment où se trouve votre commande, du restaurant à votre porte.",
     "source": require('../assets/json/tack_orders.json')
   },
   {
@@ -47,7 +47,7 @@ const LoginButton = ({navigation}) =>{
               <View
                   style={{flex:1, alignItems:'center', justifyContent: 'center',borderRadius:20,flexDirection:'row'}}           
               >                               
-                <Text style={{fontFamily:'Poppins-Regular',fontSize:17, color: '#FFF', fontWeight: '300'}}>{"Login  "}</Text>             
+                <Text style={{fontFamily:'Poppins-Regular',fontSize:17, color: '#FFF', fontWeight: '300'}}>{"Connexion  "}</Text>             
                 <Icon size={20} name='right' color='#FFF'/>            
               </View>
           </View>            
@@ -158,8 +158,8 @@ export default function Intro({navigation}) {
                 <Slide source={item.source}/>                
               </View> 
               <View style={{flex:.2}}>
-                <Text style={{color:"#FFF",fontWeight:'800',fontSize:28, marginTop:20, marginBottom:10,fontFamily:'Poppins-ExtraLight'}} >{item.title}</Text>
-                <Text style={{fontWeight:'300', color:"#FFF",fontFamily:'Poppins-Regular'}} >{item.description}</Text>
+                <Text style={{color:"#FFF", fontWeight:'800', fontSize:28, marginTop:20, marginBottom:10, fontFamily:'Poppins-ExtraLight'}} >{item.title}</Text>
+                <Text style={{fontWeight:'300', color:"#FFF", fontFamily:'Poppins-Regular'}} >{item.description}</Text>
               </View>  
               <View style={{flex:.1}}>
                 {index === 2 && <LoginButton navigation={navigation} />}

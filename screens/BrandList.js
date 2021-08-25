@@ -109,7 +109,8 @@ const BrandList = ({navigation, route}) =>  {
                 {/* Add by ilyass.net */}
                 <View style={{marginTop: 90, paddingRight: 20, paddingLeft: 20}}>
                 <Autocomplete
-                    placeholder='Type name of restaurant ...'
+                    style={{backgroundColor: '#fff'}}
+                    placeholder='Rechercher...'
                     value={value}
                     onSelect={onSelect}
                     onChangeText={onChangeText}>

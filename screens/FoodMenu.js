@@ -21,6 +21,7 @@ import Slide from '../components/Lottie/Slide'
 import {getProducts, validatePanier} from '../src/DataController'
 import {prefix} from '../Constants'
 import IconFeather from 'react-native-vector-icons/Feather';
+import AddIcon from 'react-native-vector-icons/Feather';
 import * as Animatable from 'react-native-animatable';
 import {AuthContext} from '../navigation/AuthProvider';
 import Modal from 'react-native-modal';
@@ -83,9 +84,9 @@ const Circle = ({ scrollX, products }) => {
 };
 
 
-/**************
-*   Ticker
-**************/
+/*********************
+*   Title of product (Tiker)
+**********************/
 const Ticker = ({ scrollX, products }) => {
   const inputRange = [-width, 0, width];
   const translateY = scrollX.interpolate({
@@ -111,7 +112,7 @@ const Ticker = ({ scrollX, products }) => {
 /**************
 *   Item
 **************/
-const Item = ({ imageUri, price, description, index, scrollX, product, setPanier, setLoading, panier}) => {
+const Item = ({ imageUri, name, price, description, index, scrollX, product, setPanier, setLoading, panier}) => {
 
   const [quantity, setQuantity] = useState(1)
   const [modalVisible, setModalVisible] = useState(false)
@@ -194,7 +195,7 @@ const Item = ({ imageUri, price, description, index, scrollX, product, setPanier
             },
           ]}
         >
-          {price+' FCFA'}
+          {name}
         </Animated.Text>
         <Animated.Text
           style={[
@@ -211,10 +212,27 @@ const Item = ({ imageUri, price, description, index, scrollX, product, setPanier
         >
           {description}          
         </Animated.Text>
-        <View style={{alignItems:'center', justifyContent:'center', width:230,marginTop:35}}>
-          <TouchableOpacity onPress={() => choisirQuantity()} style={[{borderRadius:20, backgroundColor:'#3b5998', padding:20, },styles.shadow]}>
-            <Text style={{fontFamily:'Poppins-SemiBold', color:'white'}}>Ajouter au Panier</Text>
-          </TouchableOpacity>
+        <Animated.Text
+          style={[
+            styles.price,
+            {
+              opacity,
+              transform: [{ translateX: translateXHeading }],
+            },
+          ]}
+        >
+          {price+' FCFA'}
+        </Animated.Text>
+        <View style={{flexDirection: 'row', justifyContent: 'center', width: '100%', paddingLeft:30, paddingRight: 30}}>
+          {/* Cart */}
+          <View style={{width:'20%', marginTop:20}}></View>
+          {/* Add to card */}
+          <View style={{width:'60%', marginTop:20}}>
+            <TouchableOpacity onPress={() => choisirQuantity()} style={[{borderRadius:20, backgroundColor:'#3b5998', padding:20, paddingRight:25, flexDirection:'row', justifyContent: 'center', alignItems: 'center'},styles.shadow]}>
+              <AddIcon color='#FFF' size={25} name='plus' />
+              <Text style={{fontFamily:'Poppins-Medium', color:'#FFF', fontSize: 17 }}> Ajouter au Panier</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
       </View>
@@ -253,6 +271,7 @@ const Pagination = ({ scrollX, products, marketData }) => {
     outputRange: [-DOT_SIZE, 0, DOT_SIZE],
   });
   return (
+    <View style={{flexDirection: 'row', justifyContent: 'center',}}>
     <View style={[styles.pagination]}>
       <Animated.View
         style={[
@@ -274,12 +293,13 @@ const Pagination = ({ scrollX, products, marketData }) => {
         );
       })}
     </View>
+    </View>
   );
 };
 
 
 /****************
-*   ProductItem
+*   ProductItem in Panier
 *****************/
 const ProductItem = ({index, item, deleteItem}) => {
 
@@ -458,6 +478,7 @@ function FoodMenuComponent({navigation, products, setSlide, setPanier, panier}) 
   // For Autocomplete
   const [value, setValue] = useState(null);
   const [data, setData] = useState(products);
+  const [visibility, setVisibility] = useState(false);
 
   const onSelect = (index) => {
     setValue(products[index].name);
@@ -476,6 +497,11 @@ function FoodMenuComponent({navigation, products, setSlide, setPanier, panier}) 
     />
   );
   {/* End Autocomplete */}
+
+  // Show & Hide autocomplete
+  const ShowAuto = () => {
+    setVisibility(!visibility)
+  }
   
   if(loading){
     return(
@@ -489,12 +515,12 @@ function FoodMenuComponent({navigation, products, setSlide, setPanier, panier}) 
     return (
       <View style={styles.container}>
           <AntDesign 
-              name='close'
+              name='arrowleft'
               size={28}
               style={{
                   position:'absolute',
                   top: 20*2,
-                  right:10,
+                  left:20,
                   zIndex:2
               }}
               color={"#333"}
@@ -503,16 +529,45 @@ function FoodMenuComponent({navigation, products, setSlide, setPanier, panier}) 
               }}
           />
 
+          {visibility ? 
+          <AntDesign 
+              name='close'
+              size={28}
+              style={{
+                  position:'absolute',
+                  top: 20*2,
+                  right:20,
+                  zIndex:2
+              }}
+              color={"#333"}
+              onPress={ShowAuto}
+          />
+          :
+          <AntDesign 
+              name='search1'
+              size={28}
+              style={{
+                  position:'absolute',
+                  top: 20*2,
+                  right:20,
+                  zIndex:2
+              }}
+              color={"#333"}
+              onPress={ShowAuto}
+          />}
+
         {/* Autocomplete */}
         <View style={{
           position: 'absolute',
           top: 33,
-          left: 30,
-          width: "80%",
-          zIndex: 1
+          right: 60,
+          width: "70%",
+          zIndex: 1,
         }}>
         <Autocomplete
-          placeholder='Choose a dish'
+          style={visibility ? {backgroundColor: '#fff'} : {display: 'none'}}
+          // style={{backgroundColor: '#fff'}}
+          placeholder='Rechercher...'
           value={value}
           onSelect={onSelect}
           onChangeText={onChangeText}>
@@ -521,9 +576,9 @@ function FoodMenuComponent({navigation, products, setSlide, setPanier, panier}) 
         </View>
         {/* End Autocomplete */}
 
-        <MyTouchable onPress={() => setSlide(1)} style={[{padding:20, borderTopLeftRadius:20,borderBottomLeftRadius:20, backgroundColor:'#758ab6', position: 'absolute', bottom:290, right:-10, zIndex:99, flexDirection:'row', alignItems: 'center' }, styles.shadow]}>
-          <IconFeather color='#FFF' size={20} name='shopping-cart' />
-          <Text style={{fontFamily:'Poppins-Medium', color: '#FFF'}}>  Votre Panier</Text>
+        <MyTouchable onPress={() => setSlide(1)} style={[{padding:22, borderRadius:20, width:72, backgroundColor:'#758ab6',  position: 'absolute', bottom:80, left:60, zIndex:99, flexDirection:'row', alignItems: 'center' }, styles.shadow]}>
+          <IconFeather color='#FFF' size={25} name='shopping-cart' />
+          {/* <Text style={{fontFamily:'Poppins-Medium', color: '#FFF'}}>  Votre Panier</Text> */}
         </MyTouchable>     
 
         <StatusBar style='auto' hidden />
@@ -548,9 +603,11 @@ function FoodMenuComponent({navigation, products, setSlide, setPanier, panier}) 
         />
         
 
-        
+        {/* <View style={{flex: 1, justifyContent: 'center'}}> */}
         <Pagination products={products} scrollX={scrollX} />
-        <Ticker products={products} scrollX={scrollX} />    
+        {/* </View> */}
+        
+        {/* <Ticker products={products} scrollX={scrollX} />     */}
       </View>
     );
   }
@@ -671,31 +728,41 @@ const styles = StyleSheet.create({
     width: width * 0.75,
     height: width * 0.75,
     resizeMode: 'contain',
-    flex: 1,
+    // flex: 1,
   },
   textContainer: {
-    alignItems: 'flex-start',
-    alignSelf: 'flex-end',
-    flex: 0.5,
+    // marginTop: -100,
+    alignItems: 'center',
+    // alignSelf: 'flex-end',
+    // flex: 1/2,
   },
   heading: {
     color: '#444',
-    textTransform: 'uppercase',
+    // textTransform: 'uppercase',
     fontFamily:'Poppins-Bold',
     fontSize: 30,
     fontWeight: '800',
     letterSpacing: 2,
-    marginBottom: 5,
+    // marginBottom: 5,
+    marginTop: -5,
   },
   description: {
-    color: '#000',
+    color: '#444',
     fontWeight: '600',
-    textAlign: 'left',
+    textAlign: 'center',
     fontFamily:'Poppins-SemiBold',
     width: width * 0.75,
-    marginRight: 10,
-    fontSize: 16,
+    fontSize: 18,
     lineHeight: 16 * 1.5,
+  },
+  price: {
+    color: '#3b5998',
+    textTransform: 'uppercase',
+    fontFamily:'Poppins-SemiBold',
+    fontSize: 26,
+    fontWeight: '800',
+    marginTop: 10,
+    letterSpacing: 1,
   },
   logo: {
     opacity: 0.9,
@@ -714,11 +781,12 @@ const styles = StyleSheet.create({
     ],
   },
   pagination: {
-    position: 'absolute',
-    right: 20,
-    bottom: 40,
+    // position: 'absolute',
+    // right: 140,
+    // bottom: 30,
     flexDirection: 'row',
     height: DOT_SIZE,
+    marginBottom: 15
   },
   paginationDot: {
     width: DOT_SIZE * 0.3,
@@ -737,10 +805,11 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#ddd',
   },
+  // Ticker
   tickerContainer: {
     position: 'absolute',
-    top: 80,
-    left: 20,
+    top: 100*4,
+    left: 150,
     overflow: 'hidden',
     height: TICKER_HEIGHT,
   },
@@ -748,7 +817,8 @@ const styles = StyleSheet.create({
     fontSize: TICKER_HEIGHT-4,
     lineHeight: TICKER_HEIGHT,
     // textTransform: 'uppercase',
-    fontFamily:'Poppins-Regular',
+    fontFamily:'Poppins-Bold',
+    color:"#000",
     fontWeight: '800',
   },
 
